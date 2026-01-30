@@ -1,32 +1,6 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/assets/(.*)",
-      "dest": "/assets/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
-  "env": {
-    "VITE_CHATGPT_API_KEY": "@chatgpt-api-key",
-    "VITE_CLAUDE_API_KEY": "@claude-api-key",
-    "VITE_GROK_API_KEY": "@grok-api-key",
-    "VITE_DEEPSEEK_API_KEY": "@deepseek-api-key",
-    "VITE_MINIMAX_API_KEY": "@minimax-api-key",
-    "VITE_MINIMAX_GROUP_ID": "@minimax-group-id",
-    "VITE_GOOGLE_CLIENT_ID": "@google-client-id",
-    "VITE_GOOGLE_CLIENT_SECRET": "@google-client-secret"
-  }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "installCommand": "npm install",
+  "framework": "vite"
 }
