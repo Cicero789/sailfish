@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { Session } from '../types';
 
 interface SessionHistoryProps {

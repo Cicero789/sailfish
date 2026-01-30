@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Session } from './types';
 import { useAuth } from './hooks/useAuth';
 import { AuthButtons } from './components/AuthButtons';
 import { SessionHistory } from './components/SessionHistory';
 import { EditorPanel } from './components/EditorPanel';
 import { OutputPanel } from './components/OutputPanel';
-import { correctGrammar, improveFlow } from './services/openai';
+import { correctGrammar, improveFlow, getCurrentProvider, getAvailableProviders } from './services/ai-providers';
 import {
   getSessions,
   saveSession,
@@ -25,9 +25,23 @@ function App() {
   const [flowImproved, setFlowImproved] = useState('');
   const [isProcessingGrammar, setIsProcessingGrammar] = useState(false);
   const [isProcessingFlow, setIsProcessingFlow] = useState(false);
+  const [currentAIProvider, setCurrentAIProvider] = useState<string | null>(null);
   
-  const grammarTimeoutRef = useRef<NodeJS.Timeout>();
+  const grammarTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const lastCompleteParagraphRef = useRef('');
+
+  // Check available AI providers on mount
+  useEffect(() => {
+    const provider = getCurrentProvider();
+    setCurrentAIProvider(provider);
+    if (provider) {
+      console.log(`Using AI provider: ${provider}`);
+      const providers = getAvailableProviders();
+      console.log(`Available providers: ${providers.join(', ')}`);
+    } else {
+      console.warn('No AI providers configured');
+    }
+  }, []);
 
   // Load sessions
   useEffect(() => {
@@ -190,6 +204,11 @@ function App() {
               </svg>
             </button>
             <h1 className="text-xl font-bold text-editor-text">Smart Word Editor</h1>
+            {currentAIProvider && (
+              <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                AI: {currentAIProvider.toUpperCase()}
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
