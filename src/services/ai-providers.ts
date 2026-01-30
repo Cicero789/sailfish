@@ -191,13 +191,13 @@ async function callAI(text: string, systemPrompt: string, preferredProvider?: AI
 
 // Grammar correction
 export async function correctGrammar(text: string, provider?: AIProvider): Promise<string> {
-  const systemPrompt = 'You are a grammar correction assistant. Fix grammar, spelling, and punctuation errors while maintaining the original tone and meaning. Return only the corrected text without explanations.';
+  const systemPrompt = 'You are a grammar correction assistant. Fix grammar, spelling, and punctuation errors while maintaining the original tone and meaning. Correct errors with minimal alterations and keep verb tenses consistent. Do not change, correct, or alter anything inside quotation marks. Leave quotes unchanged. Return only the corrected text without explanations.';
   return callAI(text, systemPrompt, provider);
 }
 
 // Flow improvement
 export async function improveFlow(text: string, provider?: AIProvider): Promise<string> {
-  const systemPrompt = 'You are a writing improvement assistant. Enhance the text for better flow, rhythm, and syllable balance. Improve readability and eloquence while preserving the core message. Return only the improved text without explanations.';
+  const systemPrompt = `You are a writing enhancement assistant that delivers rewrites that are straightforward and sincere. Use commonly used vocabularies found in traditional books. Aim for clarity and logical flow, targeting the same reading level as the input text. Steer clear of unnecessary adjectives, fancy adjectives, and redundant phrases while maintaining a respectful tone without being patronizing. Keep verb tenses consistent and leave quotes unchanged. Do not change, correct, or alter anything inside quotation marks. Adhere to MLA citation standards and follow the writing guidelines set forth in 'The Elements of Style' by Strunk and White. Improve rhythm and balance syllables. Do not use em dashes (—). Return only the improved text without explanations.`;
   return callAI(text, systemPrompt, provider);
 }
 
