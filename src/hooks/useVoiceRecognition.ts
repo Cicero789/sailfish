@@ -12,7 +12,7 @@ export function useVoiceRecognition(onTranscript: (text: string) => void) {
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
   const micStreamRef = useRef<MediaStream | null>(null);
-  const animationFrameRef = useRef<number>();
+  const animationFrameRef = useRef<number | undefined>(undefined);
 
   // Get available microphones
   const getMicrophones = useCallback(async () => {
@@ -121,7 +121,11 @@ export function useVoiceRecognition(onTranscript: (text: string) => void) {
 
     return () => {
       if (recognitionRef.current) {
-        recognitionRef.current.stop();
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {
+          // Ignore errors on cleanup
+        }
       }
       if (micStreamRef.current) {
         micStreamRef.current.getTracks().forEach(track => track.stop());
@@ -130,7 +134,8 @@ export function useVoiceRecognition(onTranscript: (text: string) => void) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [onTranscript]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const startListening = async () => {
     if (!recognitionRef.current || isListening) return;
