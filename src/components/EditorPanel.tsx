@@ -50,9 +50,9 @@ export function EditorPanel({ content, onChange, placeholder }: EditorPanelProps
   };
 
   return (
-    <div className="flex flex-col h-full bg-white">
-      <div className="flex items-center justify-between px-6 py-3 border-b border-editor-border bg-editor-bg">
-        <h2 className="text-sm font-semibold text-editor-text">Your Writing</h2>
+    <div className="flex flex-col h-full">
+      <div className="flex items-center justify-between px-6 py-4 bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
+        <h2 className="text-sm font-bold text-slate-700">✍️ Your Writing</h2>
         
         <div className="flex items-center gap-2">
           {/* Microphone Selector */}
@@ -60,7 +60,7 @@ export function EditorPanel({ content, onChange, placeholder }: EditorPanelProps
             <div className="relative">
               <button
                 onClick={() => setShowMicSelector(!showMicSelector)}
-                className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
+                className="p-2.5 hover:bg-gradient-to-br hover:from-purple-50 hover:to-indigo-50 rounded-xl transition-all duration-200"
                 title="Select microphone"
               >
                 <svg className="w-4 h-4 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
@@ -71,8 +71,8 @@ export function EditorPanel({ content, onChange, placeholder }: EditorPanelProps
               </button>
               
               {showMicSelector && (
-                <div className="absolute top-full right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg py-2 min-w-[200px] z-10">
-                  <div className="px-3 py-1 text-xs font-semibold text-gray-500 uppercase">
+                <div className="absolute top-full right-0 mt-2 bg-white border border-slate-200 rounded-xl shadow-2xl py-2 min-w-[240px] z-10">
+                  <div className="px-4 py-2 text-xs font-bold text-slate-500 uppercase tracking-wide">
                     Select Microphone
                   </div>
                   {availableMicrophones.map((mic) => (
@@ -82,14 +82,16 @@ export function EditorPanel({ content, onChange, placeholder }: EditorPanelProps
                         changeMicrophone(mic.deviceId);
                         setShowMicSelector(false);
                       }}
-                      className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 transition-colors ${
-                        selectedMicId === mic.deviceId ? 'bg-blue-50 text-blue-700' : 'text-gray-700'
+                      className={`w-full text-left px-4 py-3 text-sm hover:bg-gradient-to-r hover:from-purple-50 hover:to-indigo-50 transition-all duration-200 ${
+                        selectedMicId === mic.deviceId ? 'bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-700 font-medium' : 'text-slate-700'
                       }`}
                     >
-                      {mic.label || `Microphone ${mic.deviceId.slice(0, 8)}`}
-                      {selectedMicId === mic.deviceId && (
-                        <span className="ml-2 text-blue-500">✓</span>
-                      )}
+                      <div className="flex items-center justify-between">
+                        <span className="truncate">{mic.label || `Microphone ${mic.deviceId.slice(0, 8)}`}</span>
+                        {selectedMicId === mic.deviceId && (
+                          <span className="text-purple-600 text-lg ml-2">✓</span>
+                        )}
+                      </div>
                     </button>
                   ))}
                 </div>
@@ -101,12 +103,12 @@ export function EditorPanel({ content, onChange, placeholder }: EditorPanelProps
           <button
             onClick={handleVoiceClick}
             disabled={!isSupported}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg ${
               !isSupported
                 ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
                 : isListening
-                ? 'bg-red-500 text-white hover:bg-red-600'
-                : 'bg-accent text-white hover:bg-blue-600'
+                ? 'bg-gradient-to-r from-red-500 to-pink-500 text-white hover:from-red-600 hover:to-pink-600'
+                : 'bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700'
             }`}
             title={!isSupported ? 'Voice input not supported in this browser. Try Chrome or Safari.' : ''}
           >
@@ -126,40 +128,40 @@ export function EditorPanel({ content, onChange, placeholder }: EditorPanelProps
           value={content}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder || 'Start typing or use voice input...'}
-          className="w-full h-full px-6 py-4 text-base text-editor-text resize-none focus:outline-none leading-relaxed"
+          className="w-full h-full px-6 py-5 text-base text-slate-700 resize-none focus:outline-none leading-relaxed font-light bg-transparent"
           style={{ minHeight: '100%' }}
         />
       </div>
       
       {/* Audio Level Visualizer */}
       {isListening && (
-        <div className="px-6 py-3 bg-red-50 border-t border-red-200">
+        <div className="px-6 py-4 bg-gradient-to-r from-red-50 to-pink-50 border-t border-red-200">
           <div className="flex items-center gap-3">
             {/* Animated Microphone Icon */}
             <div className="relative">
-              <svg className="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 text-red-600" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
                 <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
               </svg>
               {/* Pulse animation */}
               <div className="absolute inset-0 animate-ping">
-                <svg className="w-5 h-5 text-red-400 opacity-75" fill="currentColor" viewBox="0 0 24 24">
+                <svg className="w-6 h-6 text-red-400 opacity-75" fill="currentColor" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="10" />
                 </svg>
               </div>
             </div>
 
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs font-medium text-red-700">Listening...</span>
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-sm font-bold text-red-700">Listening...</span>
                 <div className="flex gap-1">
                   {/* Audio level bars */}
                   {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
-                      className="w-1 bg-red-600 rounded-full transition-all duration-100"
+                      className="w-1.5 bg-gradient-to-t from-red-600 to-pink-500 rounded-full transition-all duration-100"
                       style={{
-                        height: `${Math.max(4, Math.min(20, (audioLevel / 100) * 20 * (i + 1) / 3))}px`,
+                        height: `${Math.max(6, Math.min(24, (audioLevel / 100) * 24 * (i + 1) / 3))}px`,
                         opacity: audioLevel > (i * 20) ? 1 : 0.3
                       }}
                     />
@@ -168,9 +170,9 @@ export function EditorPanel({ content, onChange, placeholder }: EditorPanelProps
               </div>
               
               {/* Audio level bar */}
-              <div className="w-full bg-red-200 rounded-full h-1.5 overflow-hidden">
+              <div className="w-full bg-red-200 rounded-full h-2 overflow-hidden shadow-inner">
                 <div
-                  className="bg-red-600 h-full rounded-full transition-all duration-100"
+                  className="bg-gradient-to-r from-red-500 to-pink-500 h-full rounded-full transition-all duration-100 shadow-sm"
                   style={{ width: `${audioLevel}%` }}
                 />
               </div>
